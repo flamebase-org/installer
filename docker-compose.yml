@@ -1,0 +1,74 @@
+services:
+  console:
+    image: ghcr.io/flamebase/flamebase-console:latest
+    container_name: flamebase-console
+    restart: unless-stopped
+    ports:
+      - "${FLAMEBASE_CONSOLE_PORT:-4000}:4000"
+    environment:
+      - FLAMEBASE_HOST=0.0.0.0
+      - FLAMEBASE_CONSOLE_PORT=4000
+      - FLAMEBASE_DATA_DIR=/var/lib/flamebase
+      - FLAMEBASE_CONSOLE_SECURE_COOKIE=${FLAMEBASE_CONSOLE_SECURE_COOKIE:-false}
+    volumes:
+      - flamebase-data:/var/lib/flamebase
+
+  auth:
+    profiles: ["auth"]
+    image: ghcr.io/flamebase/flamebase-auth:latest
+    container_name: flamebase-auth
+    restart: unless-stopped
+    ports:
+      - "${FLAMEBASE_AUTH_PORT:-9099}:9099"
+    environment:
+      - FLAMEBASE_HOST=0.0.0.0
+      - FLAMEBASE_AUTH_PORT=9099
+      - FLAMEBASE_DATA_DIR=/var/lib/flamebase
+    volumes:
+      - flamebase-data:/var/lib/flamebase
+
+  flamestore:
+    profiles: ["flamestore"]
+    image: ghcr.io/flamebase/flamebase-flamestore:latest
+    container_name: flamebase-flamestore
+    restart: unless-stopped
+    ports:
+      - "${FLAMEBASE_FLAMESTORE_PORT:-8080}:8080"
+    environment:
+      - FLAMEBASE_HOST=0.0.0.0
+      - FLAMEBASE_FLAMESTORE_PORT=8080
+      - FLAMEBASE_DATA_DIR=/var/lib/flamebase
+    volumes:
+      - flamebase-data:/var/lib/flamebase
+
+  storage:
+    profiles: ["storage"]
+    image: ghcr.io/flamebase/flamebase-storage:latest
+    container_name: flamebase-storage
+    restart: unless-stopped
+    ports:
+      - "${FLAMEBASE_STORAGE_PORT:-9199}:9199"
+    environment:
+      - FLAMEBASE_HOST=0.0.0.0
+      - FLAMEBASE_STORAGE_PORT=9199
+      - FLAMEBASE_DATA_DIR=/var/lib/flamebase
+    volumes:
+      - flamebase-data:/var/lib/flamebase
+
+  functions:
+    profiles: ["functions"]
+    image: ghcr.io/flamebase/flamebase-functions:latest
+    container_name: flamebase-functions
+    restart: unless-stopped
+    ports:
+      - "${FLAMEBASE_FUNCTIONS_PORT:-5001}:5001"
+    environment:
+      - FLAMEBASE_HOST=0.0.0.0
+      - FLAMEBASE_FUNCTIONS_PORT=5001
+      - FLAMEBASE_DATA_DIR=/var/lib/flamebase
+    volumes:
+      - flamebase-data:/var/lib/flamebase
+
+volumes:
+  flamebase-data:
+    name: flamebase_data

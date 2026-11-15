@@ -1,0 +1,24 @@
+[general]
+data_dir = "/var/lib/flamebase"
+log_level = "info"
+
+[auth]
+host = "0.0.0.0"
+port = 9099
+
+[flamestore]
+host = "0.0.0.0"
+port = 8080
+
+[storage]
+host = "0.0.0.0"
+port = 9199
+
+[functions]
+host = "0.0.0.0"
+port = 5001
+
+[console]
+host = "0.0.0.0"
+port = 4000
+admin_mode = "password"
